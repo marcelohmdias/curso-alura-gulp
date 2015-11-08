@@ -8,6 +8,7 @@ var gulp = require('gulp')
   , uglify = require('gulp-uglify')
   , cssmin = require('gulp-cssmin')
   , csslint = require('gulp-csslint')
+  , autoprefixer = require('gulp-autoprefixer')
   , usemin = require('gulp-usemin')
   , jshint = require('gulp-jshint')
   , stylish = require('jshint-stylish')
@@ -53,7 +54,7 @@ gulp.task('build',function(){
   return gulp.src('src/**/*.html')
     .pipe(usemin({
       js:[uglify],
-      css:[cssmin]
+      css:[autoprefixer, cssmin]
     }))
     .pipe(gulp.dest('dist'));
 });
