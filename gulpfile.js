@@ -8,6 +8,7 @@ var gulp = require('gulp')
   , uglify = require('gulp-uglify')
   , cssmin = require('gulp-cssmin')
   , csslint = require('gulp-csslint')
+  , less = require('gulp-less')
   , autoprefixer = require('gulp-autoprefixer')
   , usemin = require('gulp-usemin')
   , jshint = require('gulp-jshint')
@@ -32,10 +33,19 @@ gulp.task('server', function(){
       .pipe(csslint.reporter());
     });
 
+  gulp.watch('src/less/**/*.less').on('change',function(event){
+    var stram = gulp.src(event.path)
+      .pipe(less())
+      .pipe(gulp.dest('src/css/'));
+    });
+
   gulp.watch('dist/css/**/*.css').on('change',function(event){
     console.log('Linting ', event.path);
     gulp.src(event.path)
-      .pipe(jshint())
+      .pipe(jshint()).on('error', function (err) {
+        console.log('LESS, erro compilação: ' + err.filename);
+        console.log(err.message);
+      })
       .pipe(jshint.reporter(stylish()));
     });
 });
