@@ -7,10 +7,21 @@ var gulp = require( 'gulp' )
   , replace = require( 'gulp-html-replace' )
   , uglify = require( 'gulp-uglify' )
   , cssmin = require( 'gulp-cssmin' )
-  , usemin = require( 'gulp-usemin' );
+  , usemin = require( 'gulp-usemin' )
+  , sync = require( 'browser-sync' );
 
 gulp.task( 'default', [ 'copy' ], function () {
   gulp.start( 'img', 'build' );
+});
+
+gulp.task( 'server', function () {
+  sync.init({
+      server: {
+        baseDir: 'dist'
+      }
+    });
+  gulp.watch( 'dist/**/*' )
+    .on( 'change', sync.reload);
 });
 
 gulp.task( 'clean', function () {
@@ -29,13 +40,13 @@ gulp.task( 'img', function () {
     .pipe(gulp.dest( 'dist/img' ));
 });
 
-gulp.task( 'build', function () {
-  gulp.src( 'src/**/*.html' )
+gulp.task('build', function() {
+  return gulp.src('src/**/*.html')
     .pipe(usemin({
-        'js': [ uglify ]
-        , 'css': [ cssmin ]
-      }))
-    .pipe(gulp.dest( 'dist' ));
+      js: [uglify],
+      css: [cssmin]
+    }))
+    .pipe(gulp.dest('dist'));
 });
 
 gulp.task( 'js', function () {
